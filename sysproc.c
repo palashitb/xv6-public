@@ -26,6 +26,11 @@ sys_wait(void)
   return wait();
 }
 
+int sys_waitx(void){
+  int rtime, wtime;
+  return waitx(&wtime, &rtime);
+}
+
 int
 sys_kill(void)
 {
@@ -84,8 +89,8 @@ sys_uptime(void)
 {
   uint xticks;
 
-  acquire(&tickslock);
+ acquire(&tickslock);
   xticks = ticks;
-  release(&tickslock);
+  release(&tickslock); 
   return xticks;
 }
