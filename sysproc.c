@@ -27,8 +27,15 @@ sys_wait(void)
 }
 
 int sys_waitx(void){
-  int rtime, wtime;
-  return waitx(&wtime, &rtime);
+  int *rtime, *wtime;
+
+  if (argptr(0, (char **)&wtime, sizeof(int)) < 0)
+    return -1;
+
+  if (argptr(1, (char **)&rtime, sizeof(int)) < 0)
+    return -1;
+  
+  return waitx(wtime, rtime);
 }
 
 int

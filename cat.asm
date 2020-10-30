@@ -657,10 +657,12 @@ SYSCALL(uptime)
  41b:	b8 0e 00 00 00       	mov    $0xe,%eax
  420:	cd 40                	int    $0x40
  422:	c3                   	ret    
- 423:	66 90                	xchg   %ax,%ax
- 425:	66 90                	xchg   %ax,%ax
- 427:	66 90                	xchg   %ax,%ax
- 429:	66 90                	xchg   %ax,%ax
+
+00000423 <waitx>:
+SYSCALL(waitx)
+ 423:	b8 16 00 00 00       	mov    $0x16,%eax
+ 428:	cd 40                	int    $0x40
+ 42a:	c3                   	ret    
  42b:	66 90                	xchg   %ax,%ax
  42d:	66 90                	xchg   %ax,%ax
  42f:	90                   	nop

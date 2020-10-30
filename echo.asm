@@ -581,10 +581,12 @@ SYSCALL(uptime)
  38b:	b8 0e 00 00 00       	mov    $0xe,%eax
  390:	cd 40                	int    $0x40
  392:	c3                   	ret    
- 393:	66 90                	xchg   %ax,%ax
- 395:	66 90                	xchg   %ax,%ax
- 397:	66 90                	xchg   %ax,%ax
- 399:	66 90                	xchg   %ax,%ax
+
+00000393 <waitx>:
+SYSCALL(waitx)
+ 393:	b8 16 00 00 00       	mov    $0x16,%eax
+ 398:	cd 40                	int    $0x40
+ 39a:	c3                   	ret    
  39b:	66 90                	xchg   %ax,%ax
  39d:	66 90                	xchg   %ax,%ax
  39f:	90                   	nop

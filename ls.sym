@@ -11,11 +11,11 @@
 00000000 .debug_loc
 00000000 .debug_ranges
 00000000 ls.c
-00000e2c buf.1088
+00000e2c buf.1091
 00000000 ulib.c
 00000000 printf.c
 00000690 printint
-00000b1c digits.1077
+00000b1c digits.1080
 00000000 umalloc.c
 00000e3c freep
 00000e40 base
@@ -23,6 +23,7 @@
 00000050 fmtname
 00000760 printf
 000005b0 memmove
+00000683 waitx
 0000062b mknod
 00000490 gets
 00000663 getpid

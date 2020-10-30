@@ -922,10 +922,12 @@ SYSCALL(uptime)
  64b:	b8 0e 00 00 00       	mov    $0xe,%eax
  650:	cd 40                	int    $0x40
  652:	c3                   	ret    
- 653:	66 90                	xchg   %ax,%ax
- 655:	66 90                	xchg   %ax,%ax
- 657:	66 90                	xchg   %ax,%ax
- 659:	66 90                	xchg   %ax,%ax
+
+00000653 <waitx>:
+SYSCALL(waitx)
+ 653:	b8 16 00 00 00       	mov    $0x16,%eax
+ 658:	cd 40                	int    $0x40
+ 65a:	c3                   	ret    
  65b:	66 90                	xchg   %ax,%ax
  65d:	66 90                	xchg   %ax,%ax
  65f:	90                   	nop

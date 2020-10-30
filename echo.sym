@@ -14,13 +14,14 @@
 00000000 ulib.c
 00000000 printf.c
 000003a0 printint
-000007e8 digits.1077
+000007e8 digits.1080
 00000000 umalloc.c
 00000a80 freep
 00000a84 base
 00000090 strcpy
 00000470 printf
 000002c0 memmove
+00000393 waitx
 0000033b mknod
 000001a0 gets
 00000373 getpid

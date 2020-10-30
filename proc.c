@@ -247,7 +247,6 @@ exit(void)
       curproc->ofile[fd] = 0;
     }
   }
-
   begin_op();
   iput(curproc->cwd);
   end_op();
@@ -269,6 +268,11 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+
+  //***
+  curproc -> etime = ticks;
+  //***
+
   sched();
   panic("zombie exit");
 }
@@ -319,7 +323,48 @@ wait(void)
 
 //***
 int waitx(int* wtime, int* rtime){
-  
+  struct proc *p;
+  int havekids, pid;
+  struct proc *curproc = myproc();
+
+  acquire(&ptable.lock);
+  for(;;){
+    //scanning through table for exited children
+    havekids = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC] ; p++){
+      if( p -> parent != curproc )
+        continue;
+      havekids = 1;
+      if( p -> state == ZOMBIE ){
+        //Have found one of those
+
+        //time to change times
+        *rtime = p -> rtime;
+        *wtime = p -> etime - p -> ctime - p -> rtime;
+
+        pid = p -> pid;
+        kfree(p -> kstack);
+        p -> kstack = 0;
+        freevm(p -> pgdir);
+        p -> pid = 0;
+        p -> parent = 0;
+        p -> name[0] = 0;
+        p -> killed = 0;
+        p -> state = UNUSED;
+        release(&ptable.lock);
+        return pid;
+      }
+    }
+
+    //Don't wait if no children is present
+    if( !havekids || curproc -> killed ){
+      release(&ptable.lock);
+      return -1;
+    }
+
+    //Wait if any child was found
+    sleep(curproc, &ptable.lock);     //DOC: wait-sleep
+  }
 }
 //***
 

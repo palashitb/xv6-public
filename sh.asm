@@ -1972,10 +1972,12 @@ SYSCALL(uptime)
      f3b:	b8 0e 00 00 00       	mov    $0xe,%eax
      f40:	cd 40                	int    $0x40
      f42:	c3                   	ret    
-     f43:	66 90                	xchg   %ax,%ax
-     f45:	66 90                	xchg   %ax,%ax
-     f47:	66 90                	xchg   %ax,%ax
-     f49:	66 90                	xchg   %ax,%ax
+
+00000f43 <waitx>:
+SYSCALL(waitx)
+     f43:	b8 16 00 00 00       	mov    $0x16,%eax
+     f48:	cd 40                	int    $0x40
+     f4a:	c3                   	ret    
      f4b:	66 90                	xchg   %ax,%ax
      f4d:	66 90                	xchg   %ax,%ax
      f4f:	90                   	nop

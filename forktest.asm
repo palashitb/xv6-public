@@ -52,9 +52,9 @@ main(void)
 {
   46:	83 ec 14             	sub    $0x14,%esp
   write(fd, s, strlen(s));
-  49:	c7 04 24 64 04 00 00 	movl   $0x464,(%esp)
+  49:	c7 04 24 6c 04 00 00 	movl   $0x46c,(%esp)
   50:	e8 8b 01 00 00       	call   1e0 <strlen>
-  55:	b9 64 04 00 00       	mov    $0x464,%ecx
+  55:	b9 6c 04 00 00       	mov    $0x46c,%ecx
   5a:	89 4c 24 04          	mov    %ecx,0x4(%esp)
   5e:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
   65:	89 44 24 08          	mov    %eax,0x8(%esp)
@@ -91,11 +91,11 @@ main(void)
   b5:	40                   	inc    %eax
   b6:	75 55                	jne    10d <forktest+0xcd>
   write(fd, s, strlen(s));
-  b8:	c7 04 24 96 04 00 00 	movl   $0x496,(%esp)
+  b8:	c7 04 24 9e 04 00 00 	movl   $0x49e,(%esp)
   bf:	e8 1c 01 00 00       	call   1e0 <strlen>
   c4:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
   cb:	89 44 24 08          	mov    %eax,0x8(%esp)
-  cf:	b8 96 04 00 00       	mov    $0x496,%eax
+  cf:	b8 9e 04 00 00       	mov    $0x49e,%eax
   d4:	89 44 24 04          	mov    %eax,0x4(%esp)
   d8:	e8 06 03 00 00       	call   3e3 <write>
 }
@@ -104,9 +104,9 @@ main(void)
   e1:	5d                   	pop    %ebp
   e2:	c3                   	ret    
   write(fd, s, strlen(s));
-  e3:	c7 04 24 6f 04 00 00 	movl   $0x46f,(%esp)
+  e3:	c7 04 24 77 04 00 00 	movl   $0x477,(%esp)
   ea:	e8 f1 00 00 00       	call   1e0 <strlen>
-  ef:	ba 6f 04 00 00       	mov    $0x46f,%edx
+  ef:	ba 77 04 00 00       	mov    $0x477,%edx
   f4:	89 54 24 04          	mov    %edx,0x4(%esp)
   f8:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
   ff:	89 44 24 08          	mov    %eax,0x8(%esp)
@@ -114,9 +114,9 @@ main(void)
       exit();
  108:	e8 b6 02 00 00       	call   3c3 <exit>
   write(fd, s, strlen(s));
- 10d:	c7 04 24 83 04 00 00 	movl   $0x483,(%esp)
+ 10d:	c7 04 24 8b 04 00 00 	movl   $0x48b,(%esp)
  114:	e8 c7 00 00 00       	call   1e0 <strlen>
- 119:	c7 44 24 04 83 04 00 	movl   $0x483,0x4(%esp)
+ 119:	c7 44 24 04 8b 04 00 	movl   $0x48b,0x4(%esp)
  120:	00 
  121:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
  128:	89 44 24 08          	mov    %eax,0x8(%esp)
@@ -124,9 +124,9 @@ main(void)
     exit();
  131:	e8 8d 02 00 00       	call   3c3 <exit>
   write(fd, s, strlen(s));
- 136:	c7 04 24 a4 04 00 00 	movl   $0x4a4,(%esp)
+ 136:	c7 04 24 ac 04 00 00 	movl   $0x4ac,(%esp)
  13d:	e8 9e 00 00 00       	call   1e0 <strlen>
- 142:	c7 44 24 04 a4 04 00 	movl   $0x4a4,0x4(%esp)
+ 142:	c7 44 24 04 ac 04 00 	movl   $0x4ac,0x4(%esp)
  149:	00 
  14a:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
  151:	89 44 24 08          	mov    %eax,0x8(%esp)
@@ -655,3 +655,9 @@ SYSCALL(uptime)
  45b:	b8 0e 00 00 00       	mov    $0xe,%eax
  460:	cd 40                	int    $0x40
  462:	c3                   	ret    
+
+00000463 <waitx>:
+SYSCALL(waitx)
+ 463:	b8 16 00 00 00       	mov    $0x16,%eax
+ 468:	cd 40                	int    $0x40
+ 46a:	c3                   	ret    
