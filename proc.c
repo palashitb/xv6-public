@@ -379,7 +379,6 @@ int waitx(int* wtime, int* rtime){
 void
 scheduler(void)
 {
-  struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -389,24 +388,54 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
+    #ifdef RR
+      struct proc *p;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
-    }
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    #else
+    #ifdef FCFS
+      // cprintf("here\n");
+      struct proc *p;
+      struct proc *min_proc = 0;
+      for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
+        if( p -> state != RUNNABLE )
+          continue;
+        if( min_proc == 0 )
+          min_proc = p;
+        else if( p -> ctime < min_proc -> ctime )
+          min_proc = p;
+      }
+      if( min_proc != 0 && min_proc -> state == RUNNABLE ){
+        // #ifdef T
+          cprintf("Process %s with a pid %d and start time %d has started execution\n", min_proc -> name, min_proc -> pid, min_proc -> ctime);
+        // #endif
+        p = min_proc;
+        c -> proc = p;
+        switchuvm(p);
+        p -> num_run++;
+        p -> state = RUNNING;
+        swtch(&(c -> scheduler), p -> context);
+        switchkvm();
+        c -> proc = 0;
+      }
+    #endif
+    #endif
     release(&ptable.lock);
 
   }
