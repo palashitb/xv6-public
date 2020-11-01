@@ -845,17 +845,22 @@ int pls(){
     [EMBRYO] "embryo",
     [SLEEPING] "sleep",
     [RUNNABLE] "runable",
+    [RUNNING] "running",
     [ZOMBIE] "zombie"
   };
   struct proc *p;
   // char *states;
   acquire(&ptable.lock);
+  cprintf("\nPID Prioity Status    rtime ctime n_run cur_q q0 q1 q2 q3 q4\n");
   for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
-    cprintf("\n%d %d %s %d %d %d %d %d %d %d %d %d\n", 
+    if( p -> pid == 0 )
+      continue;
+    cprintf("\n %d     %d   %s     %d   %d   %d   %d   %d     %d   %d   %d   %d\n", 
       p -> pid, p -> priority, states[p -> state], p -> rtime,
       p -> ctime, p -> num_run, p -> queue, p -> ticks[0], p -> ticks[1],
       p -> ticks[2], p -> ticks[3], p -> ticks[4]);
   }
+  // cprintf("\n");
   release(&ptable.lock);
   return 1;
 }
