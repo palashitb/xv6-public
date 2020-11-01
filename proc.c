@@ -838,3 +838,24 @@ int remove_proc_from_q(struct proc *p, int q_no)
 	return 1;
 
 }
+
+int pls(){
+  static char *states[] = {
+    [UNUSED] "unused",
+    [EMBRYO] "embryo",
+    [SLEEPING] "sleep",
+    [RUNNABLE] "runable",
+    [ZOMBIE] "zombie"
+  };
+  struct proc *p;
+  // char *states;
+  acquire(&ptable.lock);
+  for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
+    cprintf("\n%d %d %s %d %d %d %d %d %d %d %d %d\n", 
+      p -> pid, p -> priority, states[p -> state], p -> rtime,
+      p -> ctime, p -> num_run, p -> queue, p -> ticks[0], p -> ticks[1],
+      p -> ticks[2], p -> ticks[3], p -> ticks[4]);
+  }
+  release(&ptable.lock);
+  return 1;
+}

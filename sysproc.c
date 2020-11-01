@@ -50,6 +50,9 @@ int sys_set_priority(void){
   return set_priority(pid, priority);
 }
 
+int sys_pls(){
+  return pls();
+}
 int
 sys_kill(void)
 {
