@@ -54,6 +54,13 @@ struct proc {
   int iotime;                  // Input/Output time
   int rtime;                   // Total time
   int num_run;
+  int priority;
+  int ticks[5];
+  int queue;
+  int curr_ticks;
+  int change_q;
+  int enter;
+  int pbs_yield_flag;
 };
 
 // Process memory is laid out contiguously, low addresses first:

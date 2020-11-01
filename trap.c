@@ -110,8 +110,20 @@ void trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER){
+      #ifdef MLFQ
+			if(myproc()->curr_ticks >= q_ticks_max[myproc()->queue]){
+				change_q_flag(myproc());
+				cprintf("Process with pid %d on Queue %d yielded out as ticks completed = %d\n", myproc()->pid, myproc()->queue, myproc()->curr_ticks);
+				yield();
+			}
+			else{
+				incr_curr_ticks(myproc());
+				cprintf("Process with pid %d continuing on Queue %d with current tick now being %d\n", myproc()->pid, myproc()->queue, myproc()->curr_ticks);
+			}	
+		#else
     #ifdef FCFS
       yield();
+    #endif
     #endif
     }
 

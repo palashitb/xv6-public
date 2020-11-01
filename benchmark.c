@@ -2,7 +2,7 @@
 #include "types.h"
 #include "user.h"
 
-int number_of_processes = 10;
+int number_of_processes = 5;
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     if (pid == 0)
     {
       volatile int i;
-      printf(1, "whoop\n");
+      // printf(1, "whoop\n");
       for (volatile int k = 0; k < number_of_processes; k++)
       {
         if (k <= j)
@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
       exit();
     }
     else{
-        ;
-    //   set_priority(100-(20+j),pid); // will only matter for PBS, comment it out if not implemented yet (better priorty for more IO intensive jobs)
+      printf(1, "haha\n");
+      set_priority(pid, 100-(20+j)); // will only matter for PBS, comment it out if not implemented yet (better priorty for more IO intensive jobs)
     }
   }
   for (j = 0; j < number_of_processes+5; j++)
