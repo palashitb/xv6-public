@@ -138,6 +138,8 @@ found:
   #ifdef MLFQ
 		p->curr_ticks = 0;
 		p->queue = 0;
+    p -> rtime = 0;
+    p -> iotime = 0;
 		p->enter = 0;
 		for(int i=0; i<5; i++)
 			p->ticks[i] = 0;
@@ -536,14 +538,11 @@ scheduler(void)
       }
     #else
     #ifdef MLFQ
-			for(int i=1; i < 5; i++)
-			{
-				for(int j=0; j <= q_tail[i]; j++)
-				{
+			for(int i=1; i < 5; i++){
+				for(int j=0; j <= q_tail[i]; j++){
 					struct proc *p = queue[i][j];
 					int age = ticks - p->enter;
-					if(age > 30)
-					{
+					if(age > 30){
 						remove_proc_from_q(p, i);
 						#ifdef T
 							cprintf("Process %d moved up to queue %d due to age time %d\n", p->pid, i-1, age);
@@ -556,10 +555,8 @@ scheduler(void)
 			struct proc *p =0;
 
 			// int oof = 0;
-			for(int i=0; i < 5; i++)
-			{
-				if(q_tail[i] >=0)
-				{
+			for(int i=0; i < 5; i++){
+				if(q_tail[i] >=0){
 					//oof = 1;
 					p = queue[i][0];
 					remove_proc_from_q(p, i);
@@ -611,8 +608,7 @@ scheduler(void)
 // break in the few places where a lock is held but
 // there's no process.
 void
-sched(void)
-{
+sched(void){
   int intena;
   struct proc *p = myproc();
 
@@ -631,8 +627,7 @@ sched(void)
 
 // Give up the CPU for one scheduling round.
 void
-yield(void)
-{
+yield(void){
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
   sched();
@@ -642,8 +637,7 @@ yield(void)
 // A fork child's very first scheduling by scheduler()
 // will swtch here.  "Return" to user space.
 void
-forkret(void)
-{
+forkret(void){
   static int first = 1;
   // Still holding ptable.lock from scheduler.
   release(&ptable.lock);
@@ -703,8 +697,7 @@ sleep(void *chan, struct spinlock *lk)
 // Wake up all processes sleeping on chan.
 // The ptable lock must be held.
 static void
-wakeup1(void *chan)
-{
+wakeup1(void *chan){
   struct proc *p;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
@@ -719,8 +712,7 @@ wakeup1(void *chan)
 
 // Wake up all processes sleeping on chan.
 void
-wakeup(void *chan)
-{
+wakeup(void *chan){
   acquire(&ptable.lock);
   wakeup1(chan);
   release(&ptable.lock);
@@ -730,8 +722,7 @@ wakeup(void *chan)
 // Process won't exit until it returns
 // to user space (see trap in trap.c).
 int
-kill(int pid)
-{
+kill(int pid){
   struct proc *p;
 
   acquire(&ptable.lock);
@@ -758,8 +749,7 @@ kill(int pid)
 // Runs when user types ^P on console.
 // No lock to avoid wedging a stuck machine further.
 void
-procdump(void)
-{
+procdump(void){
   static char *states[] = {
   [UNUSED]    "unused",
   [EMBRYO]    "embryo",
@@ -791,11 +781,9 @@ procdump(void)
 }
 
 
-int add_proc_to_q(struct proc *p, int q_no)
-{	
+int add_proc_to_q(struct proc *p, int q_no){	
 
-	for(int i=0; i < q_tail[q_no]; i++)
-	{
+	for(int i=0; i < q_tail[q_no]; i++){
 		if(p->pid == queue[q_no][i]->pid)
 			return -1;
 	}
@@ -809,15 +797,10 @@ int add_proc_to_q(struct proc *p, int q_no)
 	return 1;
 }
 
-int remove_proc_from_q(struct proc *p, int q_no)
-{
+int remove_proc_from_q(struct proc *p, int q_no){
 	int proc_found = 0, rem = 0;
-	for(int i=0; i <= q_tail[q_no]; i++)
-	{
-		// cprintf("\n%d yeet\n", queue[q_no][i] -> pid);
-		if(queue[q_no][i] -> pid == p->pid)
-		{
-			//cprintf("Process %d found in Queue %d\n", p->pid, q_no);
+	for(int i=0; i <= q_tail[q_no]; i++){
+		if(queue[q_no][i] -> pid == p->pid){
 			rem = i;
 			proc_found = 1;
 			break;
@@ -825,16 +808,12 @@ int remove_proc_from_q(struct proc *p, int q_no)
 	}
 
 	if(proc_found  == 0)
-	{
-		// cprintf("Process %d not found in Queue %d\n", p->pid, q_no);
 		return -1;
-	}
 
 	for(int i = rem; i < q_tail[q_no]; i++)
 		queue[q_no][i] = queue[q_no][i+1]; 
 
 	q_tail[q_no] -= 1;
-	// cprintf("Process %d removed from Queue %d\n", p->pid, q_no);
 	return 1;
 
 }
@@ -851,13 +830,18 @@ int pls(){
   struct proc *p;
   // char *states;
   acquire(&ptable.lock);
-  cprintf("\nPID Prioity Status    rtime ctime n_run cur_q q0 q1 q2 q3 q4\n");
+  cprintf("\nPID Prioity Status    rtime wtime n_run cur_q q0 q1 q2 q3 q4\n");
   for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
     if( p -> pid == 0 )
       continue;
+    int wtime;
+    if( p -> state == ZOMBIE )
+      wtime = p -> etime - p -> ctime - p -> rtime - p -> iotime;
+    else
+      wtime = ticks - p -> ctime - p -> rtime - p -> iotime;
     cprintf("\n %d     %d   %s     %d   %d   %d   %d   %d     %d   %d   %d   %d\n", 
       p -> pid, p -> priority, states[p -> state], p -> rtime,
-      p -> ctime, p -> num_run, p -> queue, p -> ticks[0], p -> ticks[1],
+      wtime, p -> num_run, p -> queue, p -> ticks[0], p -> ticks[1],
       p -> ticks[2], p -> ticks[3], p -> ticks[4]);
   }
   // cprintf("\n");
