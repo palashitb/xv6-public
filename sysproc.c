@@ -50,6 +50,10 @@ int sys_set_priority(void){
   return set_priority(pid, priority);
 }
 
+int sys_tick(void){
+  return ticks;
+}
+
 int sys_pls(){
   return pls();
 }

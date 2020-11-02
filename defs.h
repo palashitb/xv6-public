@@ -126,6 +126,7 @@ void            yield(void);
 void            change_q_flag(struct proc* p);
 void            incr_curr_ticks(struct proc *p);
 int             pls(void);
+int             tick(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

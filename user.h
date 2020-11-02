@@ -26,6 +26,7 @@ int uptime(void);
 int waitx(int *wtime, int *rtime);
 int set_priority(int pid, int priority);
 int pls(void);
+int tick(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

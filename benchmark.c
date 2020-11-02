@@ -2,10 +2,11 @@
 #include "types.h"
 #include "user.h"
 
-int number_of_processes = 1;
+int number_of_processes = 5;
 
 int main(int argc, char *argv[])
 {
+  int start = tick();
   int j;
   for (j = 0; j < number_of_processes; j++)
   {
@@ -37,13 +38,13 @@ int main(int argc, char *argv[])
       exit();
     }
     else{
-      printf(1, "haha\n");
       set_priority(pid, 100-(20+j)); // will only matter for PBS, comment it out if not implemented yet (better priorty for more IO intensive jobs)
     }
   }
-  for (j = 0; j < number_of_processes+5; j++)
+  for (j = 0; j < number_of_processes+3; j++)
   {
     wait();
   }
+  printf(1, "Total time taken to execute is %d\n", tick() - start);
   exit();
 }

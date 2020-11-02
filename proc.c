@@ -541,9 +541,7 @@ scheduler(void)
 					int age = ticks - p->enter;
 					if(age > 30){
 						remove_proc_from_q(p, i);
-						#ifdef T
 							cprintf("Process %d moved up to queue %d due to age time %d\n", p->pid, i-1, age);
-						#endif
 						add_proc_to_q(p, i-1);
 					}
 
