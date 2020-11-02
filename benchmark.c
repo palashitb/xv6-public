@@ -2,7 +2,7 @@
 #include "types.h"
 #include "user.h"
 
-int number_of_processes = 5;
+int number_of_processes = 10;
 
 int main(int argc, char *argv[])
 {
