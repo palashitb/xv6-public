@@ -76,6 +76,17 @@ make apt changes in makefile to run this c file and get the experience of a user
 - Ageing has been made possible by storing the age of each process and promoting it once we see it has grown over-age.
 - We basically go looking at each of the processes in each queue and alter the information for each as we give each one their go at processing.
 
+### Short Report on performance of Scheduling algorithms
+- For a test user program named benchmark(available in the repo) with no. of processes equal to 5, the ticks required to complete the execution was noted.
+1. RR   1168
+2. FCFS 2893
+3. PBS  1293
+4. MLFQ 3225
+
+- RR and PBS seem to perfrom better than others due to their minimal complexity, although RR seems to win the battle.
+- FCFS is a very primitive algorithm therefor its bad performance is justified.
+- Surprisingly, MLFQ performs the worst possibly because the no. of processes being tested is not so close to the real world simulation.
+
 ## I don't think this os is noob anymore!
 
 
