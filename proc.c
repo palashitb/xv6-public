@@ -135,7 +135,6 @@ found:
   p->context->eip = (uint)forkret;
   p -> pbs_yield_flag = 0;
   p -> priority = 60;
-  #ifdef MLFQ
 		p->curr_ticks = 0;
 		p->queue = 0;
     p -> rtime = 0;
@@ -143,7 +142,6 @@ found:
 		p->enter = 0;
 		for(int i=0; i<5; i++)
 			p->ticks[i] = 0;
-	#endif
   return p;
 }
 
@@ -496,7 +494,6 @@ scheduler(void)
       }
     #else
     #ifdef PBS
-      // cprintf("just checking\n");
       struct proc *p;
       struct proc *min_priority = 0;
 
@@ -554,10 +551,8 @@ scheduler(void)
 			}
 			struct proc *p =0;
 
-			// int oof = 0;
 			for(int i=0; i < 5; i++){
 				if(q_tail[i] >=0){
-					//oof = 1;
 					p = queue[i][0];
 					remove_proc_from_q(p, i);
 					break;
@@ -787,12 +782,10 @@ int add_proc_to_q(struct proc *p, int q_no){
 		if(p->pid == queue[q_no][i]->pid)
 			return -1;
 	}
-	// cprintf("Process %d added to Queue %d\n", p->pid, q_no);
 	p->enter = ticks;
 	p -> queue = q_no;
 	q_tail[q_no]++;
 	queue[q_no][q_tail[q_no]] = p;
-	//cprintf("yeet 1\n");
 
 	return 1;
 }
